@@ -1082,11 +1082,11 @@ button.dim:active:before {
   background-color: #d1dade;
   color: #5e5e5e;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  padding-bottom: 4px;
-  padding-left: 6px;
-  padding-right: 6px;
+  font-size: 10px;
+  font-weight: 400;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
   text-shadow: none;
 }
 .label-primary,
