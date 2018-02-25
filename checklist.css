@@ -1,0 +1,42 @@
+<style>
+    html { height: 100%; }
+    body { margin: 0; height: 100%; position: relative; }
+    /* Height / width / positioning can be customized for your use case.
+       For demo purposes, we make firepad fill the entire browser. */
+    #firepad-container {
+      width: 100%;
+      height: 100%;
+    }
+
+
+  </style>
+
+  <style>
+    .size-chart {
+      width: 100%;
+      font-size: 87.5%;
+      line-height: 1.4;
+      margin-bottom: 2em;}
+
+    a.size-chart-item {
+        display: block;
+        color: #fff;
+        padding: 1.45em 0;
+        text-align: center;
+        text-decoration: none;
+        text-transform: capitalize;
+    }
+
+    /*    .size-chart-label {
+        display: inline-block;
+        -webkit-transform: rotate(-90deg);
+        -moz-transform:    rotate(-90deg);
+        -ms-transform:     rotate(-90deg);
+        -o-transform:      rotate(-90deg);
+    }*/
+      .size-chart-size {
+        display: none;
+    }
+
+ 
+</style>
