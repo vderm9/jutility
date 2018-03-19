@@ -370,5 +370,60 @@ function task_detail_append_array(array,labels_dictionary,projects_dictionary){
 
 
 
+function html_link_from_todoist_task_dictionary(todoist_object_dictionary){
+  task_title = todoist_object_dictionary.content // this is the title of the task 
+  task_id = todoist_object_dictionary.id
+  url = 'https://en.todoist.com/app?lang=en#task%2F'+String(task_id)
+  html_task = "<a target='_blank' href='" + url + "'>" + task_title + "</a>"
+  $("#task_link").html(html_task)
+  return html_task 
+}
 
+
+function todoist_current_tasks_array_merged(todoist_api_token){
+	current_tasks_base = todoist_current_tasks_pull(todoist_api_token) 
+	current_tasks = current_tasks_base.items 
+	labels_dictionary = current_tasks_base.labels
+	labels_dictionary = array_to_dictionary(labels_dictionary) 
+	projects_dictionary = current_tasks_base.projects 
+	current_tasks = task_detail_append_array(current_tasks,labels_dictionary,projects_dictionary)
+	return current_tasks
+}
+
+
+function datatables_generate(array,row_replicate_func,table_id,tbody_id){
+  table_html=""
+  function create_table_row(item,index){
+  		row_replicate_func(item)
+      	table_html = table_html + $(tbody_id).html()
+    }
+
+    
+    array.forEach(create_table_row)   
+    $(tbody_id).html(table_html)
+    $(table_id).DataTable({
+                pageLength: 100,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+
+                    {extend: 'print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+
+            });
+
+
+  }
 
