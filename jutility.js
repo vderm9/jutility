@@ -11,6 +11,15 @@ function firebase_initialize(){
 }
 
 
+function firebase_auth_user_process(user_process_func){
+  firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+  	user_process_func(user)
+    }
+  });
+}
+
+
 //function turn an array (e.g. list of dictionaries) into a list of lists because certain functions such as datatables takes an input of a list of lists
 function list_of_lists_from_array(array,keys){
 	list_of_lists = [] //this is an empty list that will be filled with sublists
