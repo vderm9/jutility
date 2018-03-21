@@ -442,17 +442,7 @@ function todoist_current_tasks_array_merged(todoist_api_token){
 	return current_tasks
 }
 
-
-function datatables_generate(array,row_replicate_func,table_id,tbody_id){
-  table_html=""
-  function create_table_row(item,index){
-  		row_replicate_func(item)
-      	table_html = table_html + $(tbody_id).html()
-    }
-
-    
-    array.forEach(create_table_row)   
-    $(tbody_id).html(table_html)
+function datatables_generate_implement(table_id){
     $(table_id).DataTable({
                 pageLength: 100,
                 responsive: true,
@@ -475,6 +465,19 @@ function datatables_generate(array,row_replicate_func,table_id,tbody_id){
                 ]
 
             });
+}
+
+function datatables_generate(array,row_replicate_func,table_id,tbody_id){
+  table_html=""
+  function create_table_row(item,index){
+  		row_replicate_func(item)
+      	table_html = table_html + $(tbody_id).html()
+    }
+
+    
+    array.forEach(create_table_row)   
+    $(tbody_id).html(table_html)
+
 
 
   }
