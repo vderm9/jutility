@@ -443,7 +443,7 @@ function todoist_current_tasks_array_merged(todoist_api_token){
 }
 
 function datatables_generate_implement(table_id){
-    $(table_id).DataTable({
+    table = $(table_id).DataTable({
                 pageLength: 100,
                 responsive: true,
                 dom: '<"html5buttons"B>lTfgitp',
@@ -465,7 +465,19 @@ function datatables_generate_implement(table_id){
                 ]
 
             });
+
+  $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+ 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );
+
 }
+
 
 function datatables_generate(array,row_replicate_func,table_id,tbody_id){
   table_html=""
