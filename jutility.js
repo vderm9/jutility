@@ -493,3 +493,66 @@ function datatables_generate(array,row_replicate_func,table_id,tbody_id){
 
 
   }
+
+
+
+
+function th_head_from_name(field){
+  return  "<th field='"+field+"'>"+field+"</th>"
+}
+
+function selector_field_from_name(column_number,column_name){
+  return '<a class="toggle-vis" data-column="'+column_number+'">'+column_name+'</a>  |  '
+}
+
+
+function td_head_from_name(field){
+  return  "<td field='"+field+"'>"+field+"</td>"
+}
+
+
+function map_join_function(items_list,func){
+  L = []
+  items_list.forEach(function(i){
+    L.push(func(i))
+  })
+  r = L.join("")
+  return r 
+}
+
+function map_join_function_counter_input(items_list,func){
+  L = []
+  items_list.forEach(function(i,counter){
+    L.push(func(counter,i))
+  })
+  r = L.join("")
+  return r 
+}
+
+function table_formulate_from_json(key_names,starting_jquery_object){
+  	headers_html = map_join_function(key_names,th_head_from_name)
+  	column_names_html = map_join_function(key_names,td_head_from_name)
+  	selector_fields = map_join_function_counter_input(key_names,td_head_from_name)
+  	starting_jquery_object.find('tr').html(column_names_html)
+  	starting_jquery_object.find('thead').html('<tr>' + headers_html + "</tr>")
+  	starting_jquery_object.before("<p class='selector_fields'>" + selector_fields + "</p>") 
+  	return starting_jquery_object.html()
+}
+
+//needs to have a table defined within a div with an id. Need thea tags. Tbody tag with tr tag inside of it. 
+//div_id can be a table id i velieve
+function table_generate_from_json(array,div_id,key_names){
+	key_names = key_names||Object.keys(array[0])
+	starting_jquery_object = $(div_id)
+	table_formulate_from_json(key_names,starting_jquery_object)
+	table_html = ""
+
+	function create_table_row(item,index){
+		key_names.forEach(function(item_key)){
+			starting_jquery_object.find('td[field='+item_key+"]").html(item[item_key])
+		}
+		table_html = table_html + starting_jquery_object.find('tbody').html()
+	}
+	array.forEach(create_table_row)
+	starting_jquery_object.find('tbody').html(table_html)
+}
