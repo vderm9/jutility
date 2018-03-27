@@ -218,10 +218,11 @@ function todoist_completed_tasks_all(todoist_api_token){
 
 
 
-function array_to_dictionary(array){
+function array_to_dictionary(array,key_name){
+	key_name = key_name || 'id'
   new_dict = {}
   array.forEach(function(item,index){
-    new_dict[String(item.id)] = item
+    new_dict[String(item[key_name])] = item
   })
   return new_dict
 }
