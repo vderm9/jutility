@@ -496,3 +496,64 @@ function datatables_generate(array,row_replicate_func,table_id,tbody_id){
 
 
 
+//https://stackoverflow.com/questions/49394588/how-to-create-todoist-task-using-todoist-api-v7
+todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
+	var sync_token = sync_token||"*"
+
+	var commands = todoist_tasks_to_commands(tasks);
+	
+	var data = {
+		"token" : todoist_api_token,
+		'sync_token' : sync_token,
+		'resource_types' : '["projects", "items"]',
+		'commands' : commands
+	};
+	
+	jQuery.ajax({
+		url: "https://todoist.com/api/v7/sync",
+		data: data,
+		type: "POST",
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+			sync_token = response.sync_token;
+		},
+		error: function(response) { 
+			console.log(response);
+		},
+	});
+	
+}
+
+todoist_tasks_to_commands = function(tasks) {
+	
+	var commands = [];
+	
+	tasks.forEach(function(args) {
+		
+		var temp_commands = {
+			"type": "item_add",
+			"temp_id": create_guid(),
+			"uuid": create_guid(),
+			"args": args
+		};
+
+		commands.push(temp_commands)
+
+	});
+	
+	commands = JSON.stringify(commands);
+	
+	return commands;
+	
+}
+
+function create_guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
