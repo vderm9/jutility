@@ -500,6 +500,10 @@ function datatables_generate(array,row_replicate_func,table_id,tbody_id){
 todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
 	var sync_token = sync_token||"*"
 
+	tasks_is_list_array = Array.isArray(tasks)
+	if (!tasks_is_list_array){
+		tasks = [tasks]
+	}
 	var commands = todoist_tasks_to_commands(tasks);
 	
 	var data = {
