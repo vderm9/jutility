@@ -563,3 +563,39 @@ function create_guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+
+
+
+function completed_tasks_array_customize_item(item,labels_dictionary,projects_dictionary){
+    item_name = item.content 
+    item_has_time = item_name.indexOf("|") != -1 && item_name.indexOf("[") != -1 && item_name.indexOf("]") != -1
+
+    if (item_has_time){
+      var duration =parseInt(item_name.substring(item_name.lastIndexOf("|")+1,item_name.lastIndexOf("min")));
+    }
+    else {
+        duration = 0
+    }
+      item['sub_project'] = item_name.split(":")[0].trim()
+      item['duration'] = duration
+      return item 
+}
+
+function project_name_append_task_detail(item,projects_dictionary){
+      projects_dictionary = array_to_dictionary(projects_dictionary)
+      project_name = projects_dictionary[item.project_id].name||'Unknown'
+      item['project_name'] = project_name
+      return item
+  }
+
+//add custom values to the current tasks
+function completed_tasks_array_customize(array,labels_dictionary,projects_dictionary){
+  l = []
+  array.forEach(function(item,index){
+      item = completed_tasks_array_customize_item(item,labels_dictionary,projects_dictionary)
+      item = project_name_append_task_detail(item,projects_dictionary)
+      l.push(item)
+    })
+  return l 
+}
+
