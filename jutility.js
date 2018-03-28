@@ -514,7 +514,7 @@ todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
 		'commands' : commands
 	};
 	
-	jQuery.ajax({
+	return jQuery.ajax({
 		url: "https://todoist.com/api/v7/sync",
 		data: data,
 		type: "POST",
