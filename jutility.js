@@ -622,3 +622,23 @@ function completed_tasks_array_customize(array,labels_dictionary,projects_dictio
   return l 
 }
 
+
+
+
+
+function gspread_query(range,spreadsheet_id,api_key){
+	api_key = api_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+	spreadsheet_id = spreadsheet_id||"1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+	range = range||"Checklists!A1"
+	url = "https://sheets.googleapis.com/v4/spreadsheets/"+spreadsheet_id+"/values/" + range
+	return $.ajax({type: "GET",
+		url: url,
+		dataType: 'json',
+		async: false,
+		data: {
+		'key':api_key
+		}
+	});
+
+}
+
