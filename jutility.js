@@ -565,23 +565,46 @@ function create_guid() {
 }
 
 
-
-function completed_tasks_array_customize_item(item,labels_dictionary,projects_dictionary){
-    item_name = item.content 
-    item_has_time = item_name.indexOf("|") != -1 && item_name.indexOf("[") != -1 && item_name.indexOf("]") != -1
-
-    if (item_has_time){
-      var duration =parseInt(item_name.substring(item_name.lastIndexOf("|")+1,item_name.lastIndexOf("min")));
-    }
-    else {
-        duration = 0
-    }
-      item['sub_project'] = item_name.split(":")[0].trim()
-      item['duration'] = duration
-      return item 
+function task_cost_calculation(item,key_name){
+  key_name = key_name|| 'duration'
+  minutes = parseFloat(item[key_name])
+  cost = minutes * (15/60)
+  return cost 
 }
 
-function project_name_append_task_detail(item,projects_dictionary){
+function sub_project_from_task(item){
+item_name = item.content 
+sub_project = item_name.split(":")[0].trim()
+is_sub_project = sub_project.indexOf("|") == -1 && sub_project.indexOf("[") == -1  && sub_project.indexOf("@") == -1 
+if (is_sub_project){
+  return sub_project //'-'
+}
+else {
+  return '-'
+}
+}
+
+//completed_tasks_customize
+//,labels_dictionary,projects_dictionary
+//,labels_dictionary,projects_dictionary
+function completed_tasks_array_customize_item(item,labels_dictionary,projects_dictionary){
+item_name = item.content 
+item_has_time = item_name.indexOf("|") != -1 && item_name.indexOf("[") != -1 && item_name.indexOf("]") != -1
+
+if (item_has_time){
+  var duration =parseInt(item_name.substring(item_name.lastIndexOf("|")+1,item_name.lastIndexOf("min")));
+}
+else {
+    duration = 0
+}
+  item['sub_project'] = sub_project_from_task(item)//item_name.split(":")[0].trim()
+
+  item['duration'] = duration
+  item['cost'] = task_cost_calculation(item,'duration')
+  return item 
+}
+
+  function project_name_append_task_detail(item,projects_dictionary){
       projects_dictionary = array_to_dictionary(projects_dictionary)
       project_name = projects_dictionary[item.project_id].name||'Unknown'
       item['project_name'] = project_name
