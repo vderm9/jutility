@@ -642,3 +642,16 @@ function gspread_query(range,spreadsheet_id,api_key){
 
 }
 
+
+
+
+
+function gspread_list_of_lists_pull(sheet_name,spreadsheet_id,api_key){
+    api_key = api_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+    spreadsheet_id = spreadsheet_id||"1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+    sheet_name = sheet_name||"Checklists"
+
+    range = sheet_name + "!A:Z"
+    lol = gspread_query(range,spreadsheet_id,api_key).responseJSON.values
+    return lol
+}
