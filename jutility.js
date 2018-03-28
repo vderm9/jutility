@@ -180,7 +180,8 @@ function todoist_complete_task(todoist_api_token,task_id){
 }
 
 
-function todoist_completed_tasks_with_offset(todoist_api_token,offset) {
+function todoist_completed_tasks_with_offset(todoist_api_token,offset,since) {
+	since = since||'2018-02-28T10:00'
     results = $.ajax({
       type: "GET",
       url: 'https://en.todoist.com/api/v7/completed/get_all',
@@ -188,7 +189,7 @@ function todoist_completed_tasks_with_offset(todoist_api_token,offset) {
       async: false,
       data: {
         'token': todoist_api_token,
-        'since': '2018-02-28T10:00',
+        'since':since,
         //'since': '2017-12-30T10:00',
 
         'limit':'50',
@@ -202,13 +203,13 @@ function todoist_completed_tasks_with_offset(todoist_api_token,offset) {
 //Since todoist only lets you pull 50 tasks at a time, we're going to use a loop to get the first 50, then the second 50, then the third 50 tasks, etc. 
 //when it's pulling empty lists, it can stop 
 //we're going to use a while loop here (read more here: https://www.w3schools.com/js/js_loop_while.asp)
-function todoist_completed_tasks_all(todoist_api_token){
+function todoist_completed_tasks_all(todoist_api_token,since){
   todoist_tasks_pulled = []
   iterator = 0 
   master_list = []
   while (todoist_tasks_pulled.length == 50|| iterator==0) { //if todoist pulls 50 tasks, then it should try again. when it pulls less, we know that it's the last loop we need to do. since the first loop will be less than 50 tasks length, i put in or clause that is iterator is 0 which will only be when it does the first loop
     limit_variable = 50 * iterator //this will go into the todoist completed tasks query
-    todoist_tasks_pulled = todoist_completed_tasks_with_offset(todoist_api_token,limit_variable)//this is the list of tasks 
+    todoist_tasks_pulled = todoist_completed_tasks_with_offset(todoist_api_token,limit_variable,since)//this is the list of tasks 
     master_list = master_list.concat(todoist_tasks_pulled)
     iterator += 1; //this will be 1 in the first loop, 2 in the second loop, etc. 
   }
