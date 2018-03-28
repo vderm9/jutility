@@ -645,6 +645,21 @@ function gspread_query(range,spreadsheet_id,api_key){
 
 
 
+function list_of_lists_to_array(lol,key_names){
+  key_names = lol[0]||key_names
+  array = []
+  lol.forEach(function(row,row_num){
+    var new_dict =  {}
+    row.forEach(function(col,col_num){
+      cell_val = lol[row_num][col_num]
+      key_name = key_names[col_num]
+
+      new_dict[key_name] = cell_val
+    })
+    array.push(new_dict)
+  })
+  return array 
+}
 
 function gspread_list_of_lists_pull(sheet_name,spreadsheet_id,api_key){
     api_key = api_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
