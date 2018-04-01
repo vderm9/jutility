@@ -670,3 +670,22 @@ function gspread_list_of_lists_pull(sheet_name,spreadsheet_id,api_key){
     lol = gspread_query(range,spreadsheet_id,api_key).responseJSON.values
     return lol
 }
+
+
+
+
+function todoist_data_dictionary(todoist_api_token){
+	current_tasks_base = todoist_current_tasks_pull(todoist_api_token) 
+  current_tasks = current_tasks_base.items 
+  labels_dictionary = current_tasks_base.labels
+  labels_dictionary = array_to_dictionary(labels_dictionary) 
+  projects_dictionary = current_tasks_base.projects 
+  todoist_current_tasks = task_detail_append_array(current_tasks,labels_dictionary,projects_dictionary)
+  current_tasks_dictionary = array_to_dictionary(todoist_current_tasks)
+  completed_tasks_array = todoist_completed_tasks_all(todoist_api_token)  
+  completed_tasks_array = completed_tasks_array_customize(completed_tasks_array,labels_dictionary,projects_dictionary)
+
+  return {completed_tasks_array:completed_tasks_array,current_tasks_dictionary:current_tasks_dictionary,current_tasks_array:todoist_current_tasks,projects_dictionary:projects_dictionary,labels_dictionary:labels_dictionary}
+
+}
+
