@@ -696,3 +696,17 @@ function sum_float_convert_from_array(arr,key_name) {
     return r 
   }, 0); 
 }
+
+
+
+    function gspread_array_pull(sheet_name,spreadsheet_id,api_key,key_names){
+        api_key = api_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+        spreadsheet_id = spreadsheet_id||"1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+        sheet_name = sheet_name||"Checklists"
+        range = sheet_name + "!A:Z"
+        lol = gspread_query(range,spreadsheet_id,api_key).responseJSON.values
+        key_names = lol[0]||key_names
+        array = list_of_lists_to_array(lol,key_names)
+        array.shift()
+        return array
+    }
