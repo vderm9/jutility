@@ -710,3 +710,74 @@ function sum_float_convert_from_array(arr,key_name) {
         array.shift()
         return array
     }
+
+
+
+// The below function pulls the data from the guesty
+function guesty_data_pull(){
+    key = '57b6349a1f211d3c4b2b4c886c5632c7'
+    secret = '1b8e3bd1f42ce6b054868cd47dc0412f'
+    reservations_url = 'https://superhostuser.herokuapp.com/api/v2/reservations'
+    results = $.ajax
+    ({
+      type: "GET",
+      url: reservations_url,
+      dataType: 'json',
+      async: false,
+      data: {'viewId':'5616071779035e0e0096290c'},
+      headers: {
+        "Authorization": "Basic " + btoa(key + ":" + secret)
+    }
+    });
+    return results.responseJSON.results
+    }
+
+
+function number_of_days_ahead_calculate(days_ahead){
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    start_time = moment()
+    hours_list = []
+    for (i = 0; i < days_ahead; i++) { 
+        next_time = start_time.clone()
+        next_time.add(i,'day')
+        hours_list.push(next_time.format('YY-MM-DD'))
+    }
+    return hours_list
+  } 
+
+function date_format_list(list){
+  l = []
+  list.forEach(function(i){
+    r = moment(i).format('YY-MM-DD')
+    l.push(r)
+  })
+  return l 
+}
+
+
+function days_booked_from_guesty_array(guesty_array){
+  all_dates = []
+  function days_within_check_in_and_check_out(dictionary_object){
+    date_range_list = dates_between_two_days(moment(dictionary_object.checkIn),moment(dictionary_object.checkOut).add(-1,'day'))
+    all_dates = all_dates.concat(date_range_list);
+  }
+  guesty_array.forEach(days_within_check_in_and_check_out)
+
+  return all_dates
+}
+
+function occupancy_rate_calculate(array,number_of_days){
+  number_of_days_ahead = number_of_days_ahead_calculate(number_of_days)
+  dates_booked = date_format_list(days_booked_from_guesty_array(array))
+  booked_dates = []
+  number_of_days_ahead.forEach(function(date){
+    date_is_booked = dates_booked.indexOf(date) != -1 
+    if (date_is_booked){
+    booked_dates.push(date)
+    }
+  })
+  thirty_day_occupancy_rate_1806 = String(parseInt((booked_dates.length / number_of_days )*100)) + "%"
+  return thirty_day_occupancy_rate_1806
+}
