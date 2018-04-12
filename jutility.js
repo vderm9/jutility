@@ -853,3 +853,39 @@ function guesty_to_event_data_array(guesty_data){
     })
     return master_list
     }
+
+
+
+  function guesty_dictionary_customize(item,index){
+    price = item['money']['netIncome']
+    days_difference = Math.round((new Date(item['checkOut']) - new Date(item['checkIn']))/(1000*60*60*24)) 
+    revenue_per_day = price/days_difference
+    run_rate = revenue_per_day * 30
+    guest_name = item.guest.fullName
+    price = parseInt(price)||0
+    revenue_per_day = parseInt(revenue_per_day)||0
+    run_rate = parseInt(run_rate)||0
+    room=item.listing.nickname
+
+    item['days_difference'] = days_difference
+    item['revenue_per_day'] = revenue_per_day
+    item['run_rate'] = run_rate
+    item['guest_name'] = guest_name
+
+    is_3009 = item['listing']['nickname'].indexOf("3009") != -1
+    is_401 = item['listing']['nickname'].indexOf("401") != -1
+    is_1806 = item['listing']['nickname'].indexOf("1806") != -1
+    if (is_3009){
+      item['room_number'] = '3009'
+    }
+    else if (is_401){
+      item['room_number'] = '401'
+    }
+    else if (is_1806){
+      item['room_number'] = '1806'
+    }
+    else{
+      item['room_number'] = 'N/A'
+
+    }
+  }
