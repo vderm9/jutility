@@ -797,10 +797,10 @@ function guesty_data_customize(array){
     run_rate = parseInt(run_rate)||0
     room=item.listing.nickname
 
-    item[days_difference] = days_difference
-    item[revenue_per_day] = revenue_per_day
-    item[run_rate] = run_rate
-    item[guest_name] = guest_name
+    item['days_difference'] = days_difference
+    item['revenue_per_day'] = revenue_per_day
+    item['run_rate'] = run_rate
+    item['guest_name'] = guest_name
 
     is_3009 = item['listing']['nickname'].indexOf("3009") != -1
     is_401 = item['listing']['nickname'].indexOf("401") != -1
