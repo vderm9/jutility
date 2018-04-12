@@ -819,3 +819,37 @@ function guesty_data_customize(array){
   return array 
 }
 
+
+
+//This function creates the calendar date and sets it to the right format so that fullcalendar.min.js can utilize
+function calendar_date_attributes(guesty_object){
+  guest_name = guesty_object['guest']['fullName']
+  listing_name = guesty_object['listing']['nickname']
+  title = guest_name + " " + listing_name
+  is_3009 = guesty_object['listing']['nickname'].indexOf("3009") != -1
+  is_401 = guesty_object['listing']['nickname'].indexOf("401") != -1
+  is_1806 = guesty_object['listing']['nickname'].indexOf("1806") != -1
+
+
+  if (is_3009){event_color = '#30abc1'}
+  if (is_401){event_color = '#3669cb'}
+  if (is_1806){event_color = '#799b42'}
+  calendar_attributes = {
+    title:title,
+    start: new Date(guesty_object['checkIn']),
+    end:new Date(guesty_object['checkOut']),
+    color: '#799b42',
+    };
+  return calendar_attributes
+}
+
+
+// the data from guesty needs to be converted into a list format where every item in the list is a dictionary with a title, start, and end
+function guesty_to_event_data_array(guesty_data){
+    master_list = []
+    guesty_data.forEach(function(guesty_dictionary){
+        customized_dictionary = calendar_date_attributes(guesty_dictionary)
+        master_list.push(customized_dictionary)
+    })
+    return master_list
+    }
