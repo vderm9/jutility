@@ -1003,3 +1003,82 @@ function todoist_update_task(todoist_api_token,task_id,date_string){
       }
     })
 }
+
+
+
+function date_format_general(td, cellData, rowData, row, col){
+        $(td).html(moment(cellData).format("MM/DD hh:mm A"))
+
+}
+
+
+function completed_tasks_table_create(array){
+  columns = [
+    {data:'content',title:'content',visible:true,name:'content'},
+    {data:'completed_date',title:'completed_date',visible:true,name:'completed_date',type: "moment-date-format"},//createdCell:date_format_general},
+    {data:'cost',title:'cost',visible:true,name:'cost'},
+    {data:'duration',title:'duration',visible:true,name:'duration'},
+    {data:'id',title:'id',visible:true,name:'id'},
+    {data:'project_id',title:'project_id',visible:true,name:'project_id'},
+    {data:'project_name',title:'project_name',visible:true,name:'project_name'},
+    {data:'sub_project',title:'sub_project',visible:false,name:'sub_project'},
+    {data:'task_id',title:'task_id',visible:false,name:'task_id'},
+    {data:'user_id',title:'user_id',visible:false,name:'user_id'}
+  ]
+    buttons_list =  [
+        {extend: 'excel', title: document.title},
+        {extend: 'colvis', title: document.title}
+    ]
+
+    config = {paging:false,
+    dom: '<"html5buttons"B>lTfgitp',
+    data: array,
+    columns: columns,
+    colReorder: true,
+    buttons: buttons_list}
+return config   
+}
+
+function current_tasks_table_create(array){
+  columns = [
+    {data:'content',title:'content',visible:true,name:'content'},
+    {data:'date_added',title:'date_added',visible:true,name:'date_added'},
+    {data:'date_completed',title:'date_completed',visible:true,name:'date_completed'},
+    {data:'id',title:'id',visible:true,name:'id'},
+    {data:'age',title:'age',visible:true,name:'age'},
+    {data:'duration',title:'duration',visible:true,name:'duration'}
+  ]
+    buttons_list =  [
+        {extend: 'excel', title: document.title},
+        {extend: 'colvis', title: document.title}
+    ]
+
+    config = {paging:false,
+    dom: '<"html5buttons"B>lTfgitp',
+    data: array,
+    columns: columns,
+    colReorder: true,
+    buttons: buttons_list}
+return config   
+}
+
+function todoist_data_pull(todoist_api_token){
+     todoist_api_token = todoist_api_token||"fea02db7fc04ee9c9bd7c2a67c3d9de1cfa57941" //karina api token
+
+     current_tasks_base = todoist_current_tasks_pull(todoist_api_token) 
+     completed_tasks_array = todoist_completed_tasks_all(todoist_api_token)  
+     current_tasks = current_tasks_base.items 
+     labels_dictionary = current_tasks_base.labels
+     labels_dictionary = array_to_dictionary(labels_dictionary) 
+     projects_dictionary = current_tasks_base.projects 
+
+
+     todoist_current_tasks = task_detail_append_array(current_tasks,labels_dictionary,projects_dictionary)
+     current_tasks_dictionary = array_to_dictionary(todoist_current_tasks)
+     completed_tasks_array = completed_tasks_array_customize(completed_tasks_array,labels_dictionary,projects_dictionary)
+
+     return {todoist_current_tasks:todoist_current_tasks,
+          todoist_current_tasks_dictionary:current_tasks_dictionary,
+          completed_tasks_array:completed_tasks_array}
+}
+
