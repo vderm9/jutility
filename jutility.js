@@ -919,3 +919,87 @@ var str = JSON.stringify(json_input, undefined, 4);
 output(syntaxHighlight(str));
 
 }
+
+function todoist_minute_labels_dict(){
+	labels_dict={2148353597:{minute: 5, name: "5min"},
+	2148353598:{minute: 25, name: "25min"},
+	2148353599:{minute: 50, name: "50min"},
+	2148353600:{minute: 90, name: "90min"},
+	2148355626:{minute: 0, name: "Code"},
+	2148355656:{minute: 0, name: "Purchase"},
+	2148355678:{minute: 0, name: "Email"},
+	2148355700:{minute: 0, name: "Phone"},
+	2148355702:{minute: 15, name: "15min"},
+	2148394340:{minute: 0, name: "Philly"},
+	2148444040:{minute: 0, name: "BigFish"},
+	2148444042:{minute: 0, name: "SmallFish"},
+	2148739952:{minute: 0, name: "now"},
+	2148778212:{minute: 0, name: "Habit"},
+	2148778251:{minute: 0, name: "Excercise"},
+	2149153704:{minute: 2, name: "2min"}}
+	return labels_dict
+}
+
+
+function label_minute_string_to_integer(label_string){
+  label_parsed = label_string.replace("min","")
+  potential_integer = parseInt(label_parsed)
+  is_word = isNaN(potential_integer)
+  if (is_word){
+    return 0
+  }
+  else {
+    return potential_integer
+  }
+}
+
+
+function labels_add_from_labels_dictionary(labels_list,labels_dictionary){
+  r = 0 
+  labels_list.forEach(function(item,index){
+    label_dict = labels_dictionary[item]
+    minute_number = label_dict.minute 
+    r = r + minute_number
+  })
+  return r 
+}
+
+
+function todoist_to_event_dict(item,labels_dictionary){
+	labels_list = item.label_ids || item['labels']
+	time_duration = labels_add_from_labels_dictionary(labels_list,labels_dictionary)
+	due_date = item['due_date_utc']||new Date()
+	event_start_time = moment(due_date)
+    event_end_time = event_start_time.clone()
+    event_end_time.add(time_duration, 'minutes')
+    time_duration = labels_add_from_labels_dictionary(labels_list,labels_dictionary)
+    event_dict = {id: item.id , resourceId: 'id', start: event_start_time , end: event_end_time, title: item.content}
+    return event_dict
+    //event_dict = {id: item_id, resourceId: 'id', start: event_start_time , end: event_end_time, title: item.content, url:item.url}
+}
+
+
+function todoist_array_to_calendar(todoist_array){
+	labels_dictionary = todoist_minute_labels_dict()
+	l = []
+	todoist_array.forEach(function(item){
+		event_dict = todoist_to_event_dict(item,labels_dictionary)
+		l.push(event_dict)
+	})
+	
+	return l
+}
+function todoist_update_task(todoist_api_token,task_id,date_string){
+  $.ajax({
+      type: "GET",
+      url: 'https://en.todoist.com/api/v7/sync/',
+      dataType: 'json',
+      async: false,
+      data: {
+        'token': todoist_api_token,
+        'sync_token':'*',
+        'resource_types':'["items"]',
+        'commands':'[{"type": "item_update", "uuid": "f8539c77-7fd7-4846-afad-3b201f0be8a5", "args": {"id": '+String(task_id)+',"date_string":"'+date_string+'" }}]'
+      }
+    })
+}
