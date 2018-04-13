@@ -973,7 +973,7 @@ function todoist_to_event_dict(item,labels_dictionary){
     event_end_time = event_start_time.clone()
     event_end_time.add(time_duration, 'minutes')
     time_duration = labels_add_from_labels_dictionary(labels_list,labels_dictionary)
-    event_dict = {id: item.id , resourceId: 'id', start: event_start_time , end: event_end_time, title: item.content}
+    event_dict = {id: item.id , resourceId: 'id', start: event_start_time , end: event_end_time, title: item.content,url:"https://todoist.com/showTask?id="+String(item.id)}
     return event_dict
     //event_dict = {id: item_id, resourceId: 'id', start: event_start_time , end: event_end_time, title: item.content, url:item.url}
 }
