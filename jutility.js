@@ -1082,3 +1082,21 @@ function todoist_data_pull(todoist_api_token){
           completed_tasks_array:completed_tasks_array}
 }
 
+function combine_dicts(a,b){//https://stackoverflow.com/questions/43449788/how-do-i-merge-two-dictionaries-in-javascript
+  var a = a||{ fruit: "apple" },
+    b = b||{ vegetable: "carrot" },
+    food = Object.assign({}, a, b);
+    return food
+}
+  function firebase_json_pull(url){
+    url = url||"https://shippy-ac235.firebaseio.com/DataTablesTest/Test3.json"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
+
