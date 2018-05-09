@@ -1100,3 +1100,13 @@ function combine_dicts(a,b){//https://stackoverflow.com/questions/43449788/how-d
     return results
   }
 
+
+function dates_between_dates_moment(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push(currentDate.clone());
+        currentDate.add(1,'day');
+    }
+    return dateArray;
+}
